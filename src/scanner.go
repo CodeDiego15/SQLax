@@ -2,9 +2,7 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"net/http"
-	"strings"
 )
 
 var plds = []string{
@@ -181,17 +179,9 @@ func ScanURLForSQLInjection(url string) bool {
 		}
 		defer resp.Body.Close()
 
-		body, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			fmt.Println("Error:", err)
-			continue
-		}
+		fmt.Printf("Payload: %s - Status: %d\n", payload, resp.StatusCode)
 
-		fmt.Printf("Payload: %s\nResponse:\n%s\n", payload, string(body))
-
-		if strings.Contains(string(body), "SQL syntax") ||
-			strings.Contains(string(body), "mysql_fetch") ||
-			strings.Contains(string(body), "You have an error in your SQL syntax") {
+		if resp.StatusCode >= 400 {
 			return true
 		}
 	}
@@ -207,14 +197,9 @@ func ExploitSQLInjection(url string) bool {
 		}
 		defer resp.Body.Close()
 
-		body, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			continue
-		}
+		fmt.Printf("Payload: %s - Status: %d\n", pld, resp.StatusCode)
 
-		if strings.Contains(string(body), "SQL syntax") ||
-			strings.Contains(string(body), "mysql_fetch") ||
-			strings.Contains(string(body), "You have an error in your SQL syntax") {
+		if resp.StatusCode >= 400 {
 			return true
 		}
 	}
