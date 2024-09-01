@@ -11,7 +11,7 @@ SQLax es una herramienta para la detección y explotación de vulnerabilidades d
 
 Para utilizar SQLax, necesitas tener [Go](https://golang.org/dl/) instalado en tu sistema. Sigue estos pasos para instalar y usar SQLax:
 
-1. **Clona el repositorio Macos and Linux**:
+1. **Clona el repositorio Macos y Linux**:
    ```bash
    git clone https://github.com/CodeDiego15/SQLax.git
    cd SQLax
