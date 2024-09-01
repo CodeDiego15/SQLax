@@ -32,7 +32,4 @@ sqlax -u http://example.com/page.php?id=1 -v
 ```bash
 sqlax -u http://example.com/page.php?id=1 -e
 ```
-3. Detección y explotación en un solo comando:
-```bash
-sqlax -u http://example.com/page.php?id=1 -v -e
-```
+
